@@ -6,6 +6,7 @@ use app\admin\model\VersionModel;
 use cmf\controller\AdminBaseController;
 use QL\QueryList;
 use think\facade\Db;
+use think\facade\Request;
 
 /**
  * Class VersionController
@@ -25,11 +26,14 @@ class VersionController extends AdminBaseController
     public function index()
     {
         $model = new VersionModel();
-        $release_list = $model->where('group', 'release')->where('deletetime', 0)->order('id desc')->select();
-        $snapshot_list = $model->where('group', 'snapshot')->where('deletetime', 0)->order('id desc')->select();
-
-        $this->assign('release_list', $release_list);
-        $this->assign('snapshot_list', $snapshot_list);
+        if(Request::isAjax()){
+            $type = Request::post('type');
+            $list = $model->where('group', $type)->where('deletetime', 0)->order('id desc')->select();
+            foreach ($list as $k => &$v) {
+                $v['release_time'] = date('Y-m-d H:i:s', $v['release_time']);
+            }
+            $this->success('', '', $list);
+        }
         return $this->fetch();
     }
 

@@ -6,6 +6,9 @@
         justify-content: space-around;
         gap: 50px;
     }
+    /*.flex-div .bootstrap-table, .flex-div .fixed-table-toolbar .search{*/
+    /*    width: 100%;*/
+    /*}*/
 </style>
 </head>
 <body>
@@ -23,45 +26,71 @@
         <h3>快照</h3>
     </div>
     <div class="margin-top-20 flex-div">
-        <table class="table table-hover table-bordered">
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>版本号</th>
-                <th>发布时间</th>
-            </tr>
-            </thead>
-            <tbody>
-            <foreach name="release_list" item="vo">
-                <tr>
-                    <td>{$vo.id}</td>
-                    <td>{$vo.name}</td>
-                    <td>{:date('Y-m-d H:i:s',$vo['release_time'])}</td>
-                </tr>
-            </foreach>
-            </tbody>
-        </table>
-
-        <table class="table table-hover table-bordered">
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>版本号</th>
-                <th>发布时间</th>
-            </tr>
-            </thead>
-            <tbody>
-            <foreach name="snapshot_list" item="vo">
-                <tr>
-                    <td>{$vo.id}</td>
-                    <td>{$vo.name}</td>
-                    <td>{:date('Y-m-d H:i:s',$vo['release_time'])}</td>
-                </tr>
-            </foreach>
-            </tbody>
-        </table>
+        <table id="release_list"></table>
+        <table id="snapshot_list"></table>
     </div>
 </div>
 <script src="__STATIC__/js/admin.js?v={$_static_version}"></script>
+<script>
+    $('#release_list').bootstrapTable({
+        columns: [
+            {
+                field: 'id',
+                title: 'ID'
+            },
+            {
+                field: 'name',
+                title: '版本号'
+            },
+            {
+                field: 'release_time',
+                title: '发布时间'
+            }
+        ],
+        search: true,
+        height: 400,
+    });
+
+    $('#snapshot_list').bootstrapTable({
+        columns: [
+            {
+                field: 'id',
+                title: 'ID'
+            },
+            {
+                field: 'name',
+                title: '版本号'
+            },
+            {
+                field: 'release_time',
+                title: '发布时间'
+            }
+        ],
+        search: true,
+        height: 400,
+    });
+
+    $.ajax({
+        url: '{:url("version/index")}',
+        type: 'post',
+        data: {
+            type: 'release'
+        },
+        success: function(r){
+            $('#release_list').bootstrapTable('load', r.data);
+        }
+    })
+
+    $.ajax({
+        url: '{:url("version/index")}',
+        type: 'post',
+        data: {
+            type: 'snapshot'
+        },
+        success: function(r){
+            $('#snapshot_list').bootstrapTable('load', r.data);
+        }
+    })
+</script>
 </body>
 </html>
