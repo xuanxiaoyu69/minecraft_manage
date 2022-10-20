@@ -48,6 +48,7 @@
             }
         ],
         search: true,
+        customSearch: customSearch,
         height: 400,
     });
 
@@ -67,8 +68,15 @@
             }
         ],
         search: true,
+        customSearch: customSearch,
         height: 400,
     });
+
+    function customSearch(data, text){
+        return data.filter(function (row) {
+            return (row.name).indexOf(text) > -1
+        })
+    }
 
     $.ajax({
         url: '{:url("version/index")}',
