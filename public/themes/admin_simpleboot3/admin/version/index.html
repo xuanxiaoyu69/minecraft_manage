@@ -1,0 +1,88 @@
+<include file="public@header"/>
+<style>
+    .flex-div{
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-around;
+        gap: 50px;
+    }
+</style>
+</head>
+<body>
+<div class="wrap">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="javascript:void(0);">服务器</a></li>
+    </ul>
+
+    <form method="post" action="{:url('version/refresh')}" class="js-ajax-form margin-top-20">
+        <button type="submit" id="refresh_version" class="btn btn-primary js-ajax-submit">更新版本</button>
+    </form>
+
+    <div class="margin-top-20 flex-div">
+        <h3>发布</h3>
+        <h3>快照</h3>
+    </div>
+    <div class="margin-top-20 flex-div">
+        <table class="table table-hover table-bordered">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>版本号</th>
+                <th>发布时间</th>
+            </tr>
+            </thead>
+            <tbody>
+            <foreach name="release_list" item="vo">
+                <tr>
+                    <td>{$vo.id}</td>
+                    <td>{$vo.name}</td>
+                    <td>{:date('Y-m-d H:i:s',$vo['release_time'])}</td>
+                </tr>
+            </foreach>
+            </tbody>
+        </table>
+
+        <table class="table table-hover table-bordered">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>版本号</th>
+                <th>发布时间</th>
+            </tr>
+            </thead>
+            <tbody>
+            <foreach name="snapshot_list" item="vo">
+                <tr>
+                    <td>{$vo.id}</td>
+                    <td>{$vo.name}</td>
+                    <td>{:date('Y-m-d H:i:s',$vo['release_time'])}</td>
+                </tr>
+            </foreach>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script src="__STATIC__/js/admin.js?v={$_static_version}"></script>
+<script>
+    $(function(){
+        // $(document).on('click', '#refresh_version', function(){
+        //     var $btn = $(this).button('loading');
+        //     $.ajax({
+        //         url: "{:url('version/refresh')}",
+        //         type: 'post',
+        //         data: {},
+        //         success: function(res){
+        //
+        //         },
+        //         error: function(){
+        //
+        //         },
+        //         complete: function(){
+        //             $btn.button('reset');
+        //         }
+        //     })
+        // })
+    })
+</script>
+</body>
+</html>

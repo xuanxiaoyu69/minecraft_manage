@@ -26,7 +26,7 @@ class MigrationCmfCreateServerTable extends Migrator
      */
     public function change()
     {
-        $table = $this->table('server');
+        $table = $this->table('server', ['signed' => false]);
         $table->addColumn('name', 'string', ['comment' => '服务器名称'])
               ->addColumn('host', 'string', ['comment' => '服务器ip'])
               ->addColumn('user', 'string', ['comment' => '服务器账号'])

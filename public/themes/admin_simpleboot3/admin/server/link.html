@@ -1,0 +1,95 @@
+<include file="public@header"/>
+<link rel="stylesheet" href="__STATIC__/node_modules/xterm/dist/xterm.css"/>
+<script src="__STATIC__/node_modules/xterm/dist/xterm.js"></script>
+<script src="__STATIC__/node_modules/xterm/dist/addons/attach/attach.js"></script>
+<script src="__STATIC__/node_modules/xterm/dist/addons/fit/fit.js"></script>
+
+</head>
+<body>
+<div id="serverbox" class="serverbox">
+
+</div>
+<!--<a href="javascript:void(0);" onclick="java()">查询java</a>-->
+<div id="terminal" style="width:100%; height:100vh;visibility:hidden"></div>
+<script>
+    var resizeInterval;
+    var wSocket = new WebSocket("ws:mc_manage.test:8080");
+    Terminal.applyAddon(attach);  // Apply the `attach` addon
+    Terminal.applyAddon(fit);  //Apply the `fit` addon
+    var term = new Terminal();
+    term.open(document.getElementById('terminal'));
+
+    setTimeout(function(){
+        ConnectServer();
+    }, 1000)
+
+    function ConnectServer(){
+        document.getElementById("serverbox").style.visibility="hidden";
+        document.getElementById("terminal").style.visibility="visible";
+        var dataSend = {
+            "auth": {
+                "server": "{$data.host}",
+                "port": "{$data.port}",
+                "user": "{$data.user}",
+                "password": "{$data.pass}",
+                "key": "{$data.key}"
+            }
+        };
+
+        wSocket.send(JSON.stringify(dataSend));
+
+        term.fit();
+        term.focus();
+    }
+
+    wSocket.onopen = function (event) {
+        console.log("Socket Open");
+        term.attach(wSocket,false,false);
+    };
+
+    wSocket.onerror = function (event){
+        term.detach(wSocket);
+        alert("Connection Closed");
+    }
+
+    wSocket.onmessage = function (event){
+        console.log(event);
+    }
+
+    term.on('data', function (data) {
+        var dataSend = {"data":{"data":data}};
+        wSocket.send(JSON.stringify(dataSend));
+        //Xtermjs with attach dont print zero, so i force. Need to fix it :(
+        if (data=="0"){
+            term.write(data);
+        }
+    })
+
+    term.onResize(function (evt) {
+        wSocket.send(JSON.stringify({
+            "resize": {
+                "rows": evt.rows,
+                "cols": evt.cols
+            }
+        }));
+    })
+
+    //Execute resize with a timeout
+    window.onresize = function() {
+        clearTimeout(resizeInterval);
+        resizeInterval = setTimeout(resize, 400);
+    }
+    // Recalculates the terminal Columns / Rows and sends new size to SSH server + xtermjs
+    function resize() {
+        if (term) {
+            term.fit()
+        }
+    }
+
+    function java(){
+        var dataSend = {"data":{"data":"java --version\r"}};
+        wSocket.send(JSON.stringify(dataSend));
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<include file="public@header"/>
+</head>
+<body>
+<div class="wrap js-check-wrap">
+	<ul class="nav nav-tabs">
+		<li><a href="{:url('server/index')}">服务器</a></li>
+		<li><a href="{:url('server/add')}">添加</a></li>
+		<li class="active"><a href="javascript:void(0);">编辑</a></li>
+	</ul>
+	<form method="post" class="form-horizontal js-ajax-form margin-top-20" action="{:url('server/editPost')}">
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label"><span class="form-required">*</span>服务器名称:</label>
+			<div class="col-md-6 col-sm-10">
+				<input type="text" class="form-control" name="name" value="{$data.name}">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label"><span class="form-required">*</span>服务器ip:</label>
+			<div class="col-md-6 col-sm-10">
+				<input type="text" class="form-control" name="host" value="{$data.host}">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label"><span class="form-required">*</span>服务器端口:</label>
+			<div class="col-md-6 col-sm-10">
+				<input type="text" class="form-control" name="port" value="{$data.port}">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label"><span class="form-required">*</span>服务器账号:</label>
+			<div class="col-md-6 col-sm-10">
+				<input type="text" class="form-control" name="user" value="{$data.user}">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label">服务器密码:</label>
+			<div class="col-md-6 col-sm-10">
+				<input type="text" class="form-control" name="pass" value="{$data.pass}">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label">服务器证书:</label>
+			<div class="col-md-6 col-sm-10">
+				<input type="text" class="form-control" id="server-files" name="key" value="{$data.key}">
+				<a href="javascript:uploadOne('服务器证书','#server-files','file');"
+				   class="btn btn-sm btn-default">选择文件</a>
+			</div>
+		</div>
+
+		<div class="col-sm-offset-2 col-sm-10">
+			<input type="hidden" name="id" value="{$data.id}">
+			<button type="submit" class="btn btn-primary js-ajax-submit">{:lang("SAVE")}</button>
+			<a class="btn btn-default" href="{:url('index')}">返回</a>
+		</div>
+	</form>
+
+</div>
+<script src="__STATIC__/js/admin.js?v={$_static_version}"></script>
+</body>
+</html>
