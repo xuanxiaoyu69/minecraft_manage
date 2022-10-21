@@ -6,6 +6,13 @@
         justify-content: space-around;
         gap: 50px;
     }
+    .fixed-table-toolbar .search{
+        width: 100%;
+    }
+
+    .flex-div .bootstrap3{
+        width: 45%;
+    }
     /*.flex-div .bootstrap-table, .flex-div .fixed-table-toolbar .search{*/
     /*    width: 100%;*/
     /*}*/
@@ -98,6 +105,23 @@
         success: function(r){
             $('#snapshot_list').bootstrapTable('load', r.data);
         }
+    })
+
+    function changeSize(){
+        let title = $('.fixed-table-header');
+        let th = title.height()
+        title.html('')
+        $('.fixed-table-body').css('paddingTop',th+'px')
+        setTimeout(()=>{
+            let ch = $('.fixed-table-container').height()
+            $('.fixed-table-container').attr('style','')
+            $('.fixed-table-container').height(ch + th)
+        },200)
+    }
+
+    $(function(){
+        changeSize()
+        window.onresize = changeSize
     })
 </script>
 </body>
